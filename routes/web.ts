@@ -8,12 +8,28 @@ export default [
     component: '@/pages/Web/Banner/Paginate',
   },
   {
+    name: '项目',
+    icon: 'BookOutlined',
+    path: '/web/project',
+    access: 'routes',
+    permission: 'web.project.paginate',
+    component: '@/pages/Web/Project/Paginate',
+  },
+  {
     name: '栏目',
     icon: 'AppstoreAddOutlined',
     path: '/web/category',
     access: 'routes',
     permission: 'web.category.list',
     component: '@/pages/Web/Category/List',
+  },
+  {
+    name: '分类',
+    icon: 'ApartmentOutlined',
+    path: '/web/classification',
+    access: 'routes',
+    permission: 'web.classification.list',
+    component: '@/pages/Web/Classification/List',
   },
   {
     name: '联系',

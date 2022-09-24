@@ -55,15 +55,8 @@ const Editor: React.FC<APISiteRole.Props> = (props) => {
     const params: APISiteRole.Editor = {
       name: values.name,
       summary: values.summary,
-      permissions: [],
+      permissions: values.permissions,
     };
-    if (values.permissions) {
-      for (const item of values.permissions) {
-        if (item instanceof Array) {
-          params.permissions?.push(item[item.length - 1]);
-        }
-      }
-    }
 
     if (props.params) toUpdate(params);
     else toCreate(params);

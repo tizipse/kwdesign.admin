@@ -13,7 +13,7 @@ const Settings: LayoutSettings & {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: '余白',
+  title: '瞰外',
   pwa: false,
   logo: undefined,
   iconfontUrl: '',

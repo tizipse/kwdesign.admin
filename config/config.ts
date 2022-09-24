@@ -21,6 +21,9 @@ export default defineConfig({
     siderWidth: 100,
     ...defaultSettings,
   },
+  locale: {
+    default: 'zh-CN',
+  },
   dynamicImport: {
     loading: '@ant-design/pro-layout/es/PageLoading',
   },
