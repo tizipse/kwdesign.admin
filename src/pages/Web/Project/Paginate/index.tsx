@@ -20,6 +20,7 @@ import Loop from '@/utils/Loop';
 import Authorize from '@/components/Authorize';
 import Enable from '@/components/Enable';
 import {Themes} from '@/objects/Web/category';
+import moment from "moment";
 
 const Paginate: React.FC = () => {
 
@@ -80,7 +81,7 @@ const Paginate: React.FC = () => {
       setData(temp);
     }
 
-    const enable: APIRequest.Enable = {id: record.id, is_enable: record.is_enable === 1 ? 2 : 1};
+    const enable: APIWebProjects.Enable = {id: record.id, is_enable: record.is_enable === 1 ? 2 : 1};
 
     doEnable(enable)
       .then((response: APIResponse.Response<any>) => {
@@ -176,6 +177,13 @@ const Paginate: React.FC = () => {
               <Tag color={record.theme && Themes[record.theme] ? Themes[record.theme].color : ''}>
                 {record.theme && Themes[record.theme] ? Themes[record.theme].label : ''}
               </Tag>
+            )}
+          />
+          <Table.Column
+            title="日期"
+            align="center"
+            render={(record: APIWebProjects.Data) => (
+              record.dated_at && moment(record.dated_at).format('YYYY-MM-DD')
             )}
           />
           <Table.Column

@@ -40,6 +40,14 @@ export default [
     component: '@/pages/Web/Contact/Paginate',
   },
   {
+    name: '图片',
+    icon: 'FileImageOutlined',
+    path: '/web/picture',
+    access: 'routes',
+    permission: 'web.picture.list',
+    component: '@/pages/Web/Picture/List',
+  },
+  {
     name: '设置',
     icon: 'SettingOutlined',
     path: '/web/setting',
