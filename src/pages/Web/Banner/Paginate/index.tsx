@@ -8,7 +8,8 @@ import {doDelete, doEnable, doPaginate} from './service';
 import Loop from '@/utils/Loop';
 import Authorize from '@/components/Authorize';
 import Enable from '@/components/Enable';
-import {Layouts, Targets} from '@/objects/Web/banner'
+import {Targets} from '@/objects/Web/banner'
+import {Themes} from "@/objects/Web/basic";
 
 const Paginate: React.FC = () => {
 
@@ -147,11 +148,11 @@ const Paginate: React.FC = () => {
             )}
           />
           <Table.Column
-            title="布局"
+            title="主题"
             align="center"
-            render={(record: APIWebBanners.Data) => (
-              <Tag color={initialState?.settings?.primaryColor}>
-                {record.layout && Layouts[record.layout] ? Layouts[record.layout] : record.layout}
+            render={(record: APIWebCategories.Data) => (
+              <Tag color={record.theme && Themes[record.theme] ? Themes[record.theme].color : ''}>
+                {record.theme && Themes[record.theme] ? Themes[record.theme].label : ''}
               </Tag>
             )}
           />

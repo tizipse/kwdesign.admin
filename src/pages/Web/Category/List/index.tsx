@@ -19,7 +19,7 @@ import { doDelete, doEnable, doList } from './service';
 import Loop from '@/utils/Loop';
 import Authorize from '@/components/Authorize';
 import Enable from '@/components/Enable';
-import { Themes } from '@/objects/Web/category';
+import { Themes } from '@/objects/Web/basic';
 
 const Tree: React.FC = () => {
   const { initialState } = useModel('@@initialState');

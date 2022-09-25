@@ -19,7 +19,7 @@ import {doDelete, doEnable, doPaginate} from './service';
 import Loop from '@/utils/Loop';
 import Authorize from '@/components/Authorize';
 import Enable from '@/components/Enable';
-import {Themes} from '@/objects/Web/category';
+import {Themes} from '@/objects/Web/basic';
 import moment from "moment";
 
 const Paginate: React.FC = () => {

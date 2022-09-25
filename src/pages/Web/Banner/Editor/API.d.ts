@@ -10,7 +10,7 @@ declare namespace APIWebBanner {
   };
 
   type Editor = {
-    layout?: string;
+    theme?: string;
     picture?: string;
     name?: string;
     target?: string;
@@ -20,7 +20,7 @@ declare namespace APIWebBanner {
   };
 
   type Former = {
-    layout?: string;
+    theme?: string;
     pictures?: any[];
     name?: string;
     target?: string;

@@ -73,7 +73,7 @@ const Editor: React.FC<APIWebBanner.Props> = (props) => {
   const onSubmit = (values: APIWebBanner.Former) => {
 
     const params: APIWebBanner.Editor = {
-      layout: values.layout,
+      theme: values.theme,
       name: values.name,
       target: values.target,
       url: values.url,
@@ -91,7 +91,7 @@ const Editor: React.FC<APIWebBanner.Props> = (props) => {
 
   const toInitByUpdate = () => {
     former.setFieldsValue({
-      layout: props.params?.layout,
+      theme: props.params?.theme,
       pictures: [{key: props.params?.id, thumbUrl: props.params?.picture}],
       name: props.params?.name,
       target: props.params?.target,
@@ -104,7 +104,7 @@ const Editor: React.FC<APIWebBanner.Props> = (props) => {
   const toInit = () => {
     if (!props.params) {
       former.setFieldsValue({
-        layout: 'mobile',
+        theme: undefined,
         pictures: undefined,
         name: undefined,
         target: 'self',
@@ -136,11 +136,10 @@ const Editor: React.FC<APIWebBanner.Props> = (props) => {
       <Form form={former} labelCol={{span: 5}} onFinish={onSubmit}>
         <Row gutter={10}>
           <Col span={24} md={{span: 12}}>
-            <Form.Item label="布局" name="layout" rules={[{required: true}]}>
+            <Form.Item label="主题" name="theme" rules={[{required: true}]}>
               <Select>
-                <Select.Option value='mobile'>移动端</Select.Option>
-                <Select.Option value='ipad'>平板端</Select.Option>
-                <Select.Option value='pc'>电脑端</Select.Option>
+                <Select.Option value="light">明亮</Select.Option>
+                <Select.Option value="dark">黑暗</Select.Option>
               </Select>
             </Form.Item>
             <Form.Item label='图片' name='pictures' valuePropName='fileList' getValueFromEvent={onUpload}

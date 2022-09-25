@@ -2,7 +2,7 @@ declare namespace APIWebBanners {
 
   type Data = {
     id: number;
-    layout?: string;
+    theme?: string;
     picture: string;
     name: string;
     target: string;

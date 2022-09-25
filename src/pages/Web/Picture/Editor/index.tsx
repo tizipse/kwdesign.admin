@@ -124,7 +124,7 @@ const Editor: React.FC<APIWebPicture.Props> = (props) => {
       footer={
         <Space size={[10, 10]}>
           {
-            !!props.params && props.params.val &&
+            !!props.params && props.params.required != 1 && props.params.val &&
             <Button danger onClick={onRemovePicture}>删除图片</Button>
           }
           <Button onClick={props.onCancel}>取消</Button>
@@ -143,7 +143,7 @@ const Editor: React.FC<APIWebPicture.Props> = (props) => {
           </Form.Item>
         }
         <Form.Item label='图片' name='val' valuePropName='fileList' getValueFromEvent={onUpload}
-                   rules={[{required: !props.params}]}>
+                   rules={[{required: !props.params || props.params.required != 2}]}>
           <Upload
             name="file"
             listType="picture-card"
