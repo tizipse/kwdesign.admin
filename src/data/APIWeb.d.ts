@@ -1,14 +1,14 @@
 declare namespace APIWeb {
-
   type Category = {
     id?: number;
-    theme?: string;
     uri?: string;
     name?: string;
-    picture?: string;
     title?: string;
     keyword?: string;
     description?: string;
+    is_required_picture?: number;
+    picture?: string;
+    is_required_html?: number;
     html?: string;
     is_enable?: number;
   };
@@ -41,6 +41,5 @@ declare namespace APIWeb {
     html?: string;
     pictures?: string[];
     is_enable?: number;
-  }
-
+  };
 }

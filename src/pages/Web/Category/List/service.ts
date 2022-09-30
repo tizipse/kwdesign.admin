@@ -16,3 +16,17 @@ export async function doEnable(data: APIRequest.Enable) {
     data: data,
   });
 }
+
+export async function doRequiredPicture(data: APIWebCategories.RequiredPicture) {
+  return request<APIResponse.Response<any>>('/api/admin/web/category/is_required_picture', {
+    method: 'PUT',
+    data: data,
+  });
+}
+
+export async function doRequiredHtml(data: APIWebCategories.RequiredHtml) {
+  return request<APIResponse.Response<any>>('/api/admin/web/category/is_required_html', {
+    method: 'PUT',
+    data: data,
+  });
+}

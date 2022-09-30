@@ -9,27 +9,29 @@ declare namespace APIWebCategory {
   };
 
   type Editor = {
-    theme?: string;
     uri?: string;
     name?: string;
     picture?: string;
     title?: string;
     keyword?: string;
     description?: string;
+    is_required_picture?: number;
+    is_required_html?: number;
     is_enable?: number;
     html?: string;
   };
 
   type Former = {
-    theme?: string;
     uri?: string;
     name?: string;
     pictures?: any[];
     title?: string;
     keyword?: string;
     description?: string;
+    is_required_picture?: number;
+    is_required_html?: number;
     is_enable?: number;
-    content?: any;
+    html?: any;
   };
 
   type Loading = {

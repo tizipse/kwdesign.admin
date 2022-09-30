@@ -15,13 +15,15 @@ import Constants from '@/utils/Constants';
 import { FormOutlined, RedoOutlined } from '@ant-design/icons';
 import { useModel } from 'umi';
 import Editor from '@/pages/Web/Category/Editor';
-import { doDelete, doEnable, doList } from './service';
+import { doDelete, doEnable, doList, doRequiredHtml, doRequiredPicture } from './service';
 import Loop from '@/utils/Loop';
 import Authorize from '@/components/Authorize';
 import Enable from '@/components/Enable';
-import { Themes } from '@/objects/Web/basic';
+import YesOrNo from '@/components/YesOrNo';
 
-const Tree: React.FC = () => {
+import styles from './index.less';
+
+const List: React.FC = () => {
   const { initialState } = useModel('@@initialState');
 
   const [editor, setEditor] = useState<APIWebCategories.Data | undefined>();
@@ -110,6 +112,103 @@ const Tree: React.FC = () => {
       });
   };
 
+  const onRequiredPicture = (record: APIWebCategories.Data) => {
+    if (data) {
+      const temp: APIWebCategories.Data[] = [...data];
+      Loop.ById(
+        temp,
+        record.id,
+        (item: APIWebCategories.Data) => (item.loading_required_picture = true),
+      );
+      setData(temp);
+    }
+
+    const required: APIWebCategories.RequiredPicture = {
+      id: record.id,
+      is_required_picture: record.is_required_picture === 1 ? 2 : 1,
+    };
+
+    doRequiredPicture(required)
+      .then((response: APIResponse.Response<any>) => {
+        if (response.code !== Constants.Success) {
+          notification.error({ message: response.message });
+        } else {
+          notification.success({
+            message: `${required.is_required_picture === 1 ? '开启' : '关闭'}成功！`,
+          });
+          if (data) {
+            const temp = [...data];
+            Loop.ById(
+              temp,
+              record.id,
+              (item: APIWebCategories.Data) =>
+                (item.is_required_picture = required.is_required_picture),
+            );
+            setData(temp);
+          }
+        }
+      })
+      .finally(() => {
+        if (data) {
+          const temp = [...data];
+          Loop.ById(
+            temp,
+            record.id,
+            (item: APIWebCategories.Data) => (item.loading_required_picture = false),
+          );
+          setData(temp);
+        }
+      });
+  };
+
+  const onRequiredHtml = (record: APIWebCategories.Data) => {
+    if (data) {
+      const temp: APIWebCategories.Data[] = [...data];
+      Loop.ById(
+        temp,
+        record.id,
+        (item: APIWebCategories.Data) => (item.loading_required_html = true),
+      );
+      setData(temp);
+    }
+
+    const required: APIWebCategories.RequiredHtml = {
+      id: record.id,
+      is_required_html: record.is_required_html === 1 ? 2 : 1,
+    };
+
+    doRequiredHtml(required)
+      .then((response: APIResponse.Response<any>) => {
+        if (response.code !== Constants.Success) {
+          notification.error({ message: response.message });
+        } else {
+          notification.success({
+            message: `${required.is_required_html === 1 ? '开启' : '关闭'}成功！`,
+          });
+          if (data) {
+            const temp = [...data];
+            Loop.ById(
+              temp,
+              record.id,
+              (item: APIWebCategories.Data) => (item.is_required_html = required.is_required_html),
+            );
+            setData(temp);
+          }
+        }
+      })
+      .finally(() => {
+        if (data) {
+          const temp = [...data];
+          Loop.ById(
+            temp,
+            record.id,
+            (item: APIWebCategories.Data) => (item.loading_required_html = false),
+          );
+          setData(temp);
+        }
+      });
+  };
+
   const onCreate = () => {
     setEditor(undefined);
     setVisible({ ...visible, editor: true });
@@ -160,19 +259,46 @@ const Tree: React.FC = () => {
             )}
           />
           <Table.Column
-            title="主题"
+            title="必传图片"
             align="center"
             render={(record: APIWebCategories.Data) => (
-              <Tag color={record.theme && Themes[record.theme] ? Themes[record.theme].color : ''}>
-                {record.theme && Themes[record.theme] ? Themes[record.theme].label : ''}
-              </Tag>
+              <Authorize
+                permission="web.category.required_picture"
+                fallback={<YesOrNo is_yes={record.is_required_picture} />}
+              >
+                <Switch
+                  size="small"
+                  checked={record.is_required_picture === 1}
+                  onClick={() => onRequiredPicture(record)}
+                  loading={record.loading_required_picture}
+                />
+              </Authorize>
+            )}
+          />
+          <Table.Column
+            title="必填内容"
+            align="center"
+            render={(record: APIWebCategories.Data) => (
+              <Authorize
+                permission="web.category.required_html"
+                fallback={<YesOrNo is_yes={record.is_required_html} />}
+              >
+                <Switch
+                  size="small"
+                  checked={record.is_required_html === 1}
+                  onClick={() => onRequiredHtml(record)}
+                  loading={record.loading_required_html}
+                />
+              </Authorize>
             )}
           />
           <Table.Column
             title="图片"
             align="center"
             render={(record: APIWebCategories.Data) =>
-              record.picture && <Image height={50} src={record.picture} />
+              record.picture && (
+                <Image height={50} src={record.picture} className={styles.picture} />
+              )
             }
           />
           <Table.Column
@@ -225,4 +351,4 @@ const Tree: React.FC = () => {
   );
 };
 
-export default Tree;
+export default List;

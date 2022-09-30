@@ -1,7 +1,8 @@
-import { Button, Form, Input, Modal, notification, Select, Space, Spin, Tabs, Upload } from 'antd';
+import { Form, Input, Modal, notification, Select, Spin, Tabs, Upload } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { doCreate, doUpdate } from './service';
 import { doUpload } from '@/services/helper';
+import { doWebCategoryByInformation } from '@/services/web';
 import Constants from '@/utils/Constants';
 import { InboxOutlined } from '@ant-design/icons';
 import BraftEditor from 'braft-editor';
@@ -15,7 +16,6 @@ import 'braft-extensions/dist/color-picker.css';
 import 'braft-extensions/dist/table.css';
 
 import styles from './index.less';
-import { doWebCategoryByInformation } from '@/services/web';
 
 BraftEditor.use(ColorPicker({ theme: 'dark' }));
 BraftEditor.use(Table({ columnResizable: true }));
@@ -26,6 +26,8 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
   const [type, setType] = useState('basic');
 
   const pictures = Form.useWatch('pictures', former);
+  const is_required_picture = Form.useWatch('is_required_picture', former);
+  const is_required_html = Form.useWatch('is_required_html', former);
 
   const onUpload = (e: any) => {
     if (Array.isArray(e)) return e;
@@ -93,14 +95,15 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
 
   const onSubmit = (values: APIWebCategory.Former) => {
     const params: APIWebCategory.Editor = {
-      theme: values.theme,
       uri: values.uri,
       name: values.name,
       title: values.title,
       keyword: values.keyword,
       description: values.description,
       is_enable: values.is_enable,
-      html: values.content.toHTML(),
+      is_required_picture: values.is_required_picture,
+      is_required_html: values.is_required_html,
+      html: values.html.toHTML(),
     };
 
     if (values.pictures && values.pictures.length > 0) {
@@ -116,6 +119,10 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
 
     if (!values.name || !values.uri) {
       setType('basic');
+    } else if (is_required_picture == 1 && (!values.pictures || values.pictures.length <= 0)) {
+      setType('picture');
+    } else if (is_required_html == 1 && !values.html) {
+      setType('html');
     }
   };
 
@@ -129,7 +136,6 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
           if (props.onCancel) props.onCancel();
         } else {
           const data: APIWebCategory.Former = {
-            theme: response.data.theme,
             name: response.data.name,
             title: response.data.title,
             keyword: response.data.keyword,
@@ -137,7 +143,9 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
             uri: response.data.uri,
             pictures: undefined,
             is_enable: response.data.is_enable,
-            content: BraftEditor.createEditorState(response.data.html),
+            is_required_picture: response.data.is_required_picture,
+            is_required_html: response.data.is_required_html,
+            html: BraftEditor.createEditorState(response.data.html),
           };
 
           if (response.data.picture) {
@@ -157,7 +165,6 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
       toInitByUpdate();
     } else {
       former.setFieldsValue({
-        theme: 'light',
         uri: undefined,
         name: undefined,
         title: undefined,
@@ -165,13 +172,11 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
         description: undefined,
         pictures: undefined,
         is_enable: 1,
-        content: BraftEditor.createEditorState(null),
+        is_required_picture: 2,
+        is_required_html: 2,
+        html: BraftEditor.createEditorState(null),
       });
     }
-  };
-
-  const onRemovePicture = () => {
-    former.setFieldsValue({ pictures: undefined });
   };
 
   useEffect(() => {
@@ -188,30 +193,13 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
       centered
       maskClosable={false}
       confirmLoading={loading.confirmed}
-      footer={
-        <Space size={[10, 10]}>
-          {pictures && pictures.length > 0 && (
-            <Button danger onClick={onRemovePicture}>
-              删除图片
-            </Button>
-          )}
-          <Button onClick={props.onCancel}>取消</Button>
-          <Button type="primary" onClick={former.submit}>
-            确定
-          </Button>
-        </Space>
-      }
+      onCancel={props.onCancel}
+      onOk={former.submit}
     >
       <Spin spinning={!!loading.information} tip="数据加载中...">
         <Form form={former} onFinishFailed={onFailed} onFinish={onSubmit} labelCol={{ span: 2 }}>
           <Tabs activeKey={type} onChange={(activeKey) => setType(activeKey)}>
             <Tabs.TabPane key="basic" tab="基本" forceRender>
-              <Form.Item label="主题" name="theme" rules={[{ required: true }]}>
-                <Select>
-                  <Select.Option value="light">明亮</Select.Option>
-                  <Select.Option value="dark">黑暗</Select.Option>
-                </Select>
-              </Form.Item>
               <Form.Item label="名称" name="name" rules={[{ required: true }, { max: 32 }]}>
                 <Input />
               </Form.Item>
@@ -222,6 +210,18 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
                 <Select>
                   <Select.Option value={1}>是</Select.Option>
                   <Select.Option value={2}>否</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item label="图片" name="is_required_picture" rules={[{ required: true }]}>
+                <Select disabled={!!props.params}>
+                  <Select.Option value={1}>必填上传</Select.Option>
+                  <Select.Option value={2}>无需上传</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item label="内容" name="is_required_html" rules={[{ required: true }]}>
+                <Select disabled={!!props.params}>
+                  <Select.Option value={1}>必填填写</Select.Option>
+                  <Select.Option value={2}>无需填写</Select.Option>
                 </Select>
               </Form.Item>
             </Tabs.TabPane>
@@ -236,51 +236,69 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
                 <Input.TextArea rows={3} showCount maxLength={255} />
               </Form.Item>
             </Tabs.TabPane>
-            <Tabs.TabPane key="other" tab="其他" forceRender>
-              <Form.Item
-                label="图片"
-                name="pictures"
-                valuePropName="fileList"
-                getValueFromEvent={onUpload}
-              >
-                <Upload
-                  name="file"
-                  listType="picture-card"
-                  className={styles.upload}
-                  showUploadList={false}
-                  maxCount={1}
-                  action={Constants.Upload}
-                  headers={{
-                    Authorization: localStorage.getItem(Constants.Authorization) as string,
-                  }}
-                  data={{ dir: '/category/banner' }}
-                  onRemove={() => console.info('remove')}
+            {is_required_picture == 1 && (
+              <Tabs.TabPane key="picture" tab="图片" forceRender>
+                <Form.Item
+                  name="pictures"
+                  valuePropName="fileList"
+                  getValueFromEvent={onUpload}
+                  rules={[{ required: true, message: '图片不能为空' }]}
                 >
-                  <Spin spinning={!!loading.upload} tip="上传中...">
-                    {pictures && pictures.length > 0 ? (
-                      <img src={pictures[0].thumbUrl} alt={props.params?.name} />
-                    ) : (
-                      <div className="upload-area">
-                        <p className="ant-upload-drag-icon">
-                          <InboxOutlined className="upload-icon" />
-                        </p>
-                        <p className="ant-upload-text">点击进行上传</p>
-                        <p className="ant-upload-hint">Support for a single upload.</p>
-                      </div>
-                    )}
-                  </Spin>
-                </Upload>
-              </Form.Item>
-            </Tabs.TabPane>
-            <Tabs.TabPane key="page" tab="内容" forceRender>
-              <Form.Item name="content">
-                <BraftEditor
-                  media={{ uploadFn: onUploadByEditor }}
-                  controls={Constants.Controls()}
-                  className={styles.braft}
-                />
-              </Form.Item>
-            </Tabs.TabPane>
+                  <Upload
+                    name="file"
+                    listType="picture-card"
+                    className={styles.upload}
+                    showUploadList={false}
+                    maxCount={1}
+                    action={Constants.Upload}
+                    headers={{
+                      Authorization: localStorage.getItem(Constants.Authorization) as string,
+                    }}
+                    data={{ dir: '/category/banner' }}
+                    onRemove={() => console.info('remove')}
+                  >
+                    <Spin spinning={!!loading.upload} tip="上传中...">
+                      {pictures && pictures.length > 0 ? (
+                        <img src={pictures[0].thumbUrl} alt={props.params?.name} />
+                      ) : (
+                        <div className="upload-area">
+                          <p className="ant-upload-drag-icon">
+                            <InboxOutlined className="upload-icon" />
+                          </p>
+                          <p className="ant-upload-text">点击进行上传</p>
+                          <p className="ant-upload-hint">Support for a single upload.</p>
+                        </div>
+                      )}
+                    </Spin>
+                  </Upload>
+                </Form.Item>
+              </Tabs.TabPane>
+            )}
+            {is_required_html == 1 && (
+              <Tabs.TabPane key="html" tab="内容" forceRender>
+                <Form.Item
+                  name="html"
+                  rules={[
+                    {
+                      required: true,
+                      validator: (rule, value) => {
+                        if (value.isEmpty()) {
+                          return Promise.reject('请输入内容');
+                        } else {
+                          return Promise.resolve();
+                        }
+                      },
+                    },
+                  ]}
+                >
+                  <BraftEditor
+                    media={{ uploadFn: onUploadByEditor }}
+                    controls={Constants.Controls()}
+                    className={styles.braft}
+                  />
+                </Form.Item>
+              </Tabs.TabPane>
+            )}
           </Tabs>
         </Form>
       </Spin>
