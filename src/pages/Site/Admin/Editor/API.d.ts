@@ -12,16 +12,16 @@ declare namespace APISiteAdmin {
     username?: string;
     nickname?: string;
     password?: string;
-    signature?: string;
     roles?: number[];
+    is_enable?: number;
   };
 
   type Former = {
     username?: string;
     nickname?: string;
     password?: string;
-    signature?: string;
     roles?: number[];
+    is_enable?: number;
   };
 
   type Role = {

@@ -15,7 +15,7 @@ export async function doModule() {
   return request<APIResponse.Response<any>>('/api/admin/account/module');
 }
 
-export async function doPermission(module: number) {
+export async function doPermission(module?: number) {
   return request<APIResponse.Response<any>>('/api/admin/account/permission', {
     params: { module },
   });

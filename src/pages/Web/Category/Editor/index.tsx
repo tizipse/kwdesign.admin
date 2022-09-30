@@ -103,12 +103,13 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
       is_enable: values.is_enable,
       is_required_picture: values.is_required_picture,
       is_required_html: values.is_required_html,
-      html: values.html.toHTML(),
     };
 
     if (values.pictures && values.pictures.length > 0) {
       params.picture = values.pictures[0].thumbUrl;
     }
+
+    if (values.html) params.html = values.html.toHTML();
 
     if (props.params) toUpdate(params);
     else toCreate(params);

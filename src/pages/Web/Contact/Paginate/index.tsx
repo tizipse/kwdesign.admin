@@ -129,7 +129,7 @@ const Paginate: React.FC = () => {
             <Tooltip title="刷新">
               <Button type="primary" icon={<RedoOutlined />} onClick={toPaginate} loading={load} />
             </Tooltip>
-            <Authorize permission="web.banner.create">
+            <Authorize permission="web.contact.create">
               <Tooltip title="创建">
                 <Button type="primary" icon={<FormOutlined />} onClick={onCreate} />
               </Tooltip>
@@ -170,7 +170,7 @@ const Paginate: React.FC = () => {
             align="center"
             render={(record: APIWebContacts.Data) => (
               <Authorize
-                permission="web.banner.enable"
+                permission="web.contact.enable"
                 fallback={<Enable is_enable={record.is_enable} />}
               >
                 <Switch
@@ -187,12 +187,12 @@ const Paginate: React.FC = () => {
             width={100}
             render={(record: APIWebContacts.Data) => (
               <>
-                <Authorize permission="web.banner.update">
+                <Authorize permission="web.contact.update">
                   <Button type="link" onClick={() => onUpdate(record)}>
                     编辑
                   </Button>
                 </Authorize>
-                <Authorize permission="web.banner.delete">
+                <Authorize permission="web.contact.delete">
                   <Popconfirm
                     title="确定要删除该数据?"
                     placement="leftTop"

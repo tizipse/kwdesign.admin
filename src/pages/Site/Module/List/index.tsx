@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Card, notification, Popconfirm, Space, Switch, Table, Tag, Tooltip} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, notification, Popconfirm, Space, Switch, Table, Tag, Tooltip } from 'antd';
 import Constants from '@/utils/Constants';
-import {FormOutlined, RedoOutlined} from '@ant-design/icons';
-import {useModel} from 'umi';
+import { FormOutlined, RedoOutlined } from '@ant-design/icons';
+import { useModel } from 'umi';
 import Editor from '@/pages/Site/Module/Editor';
-import {doDelete, doEnable, doList} from './service';
+import { doDelete, doEnable, doList } from './service';
 import Loop from '@/utils/Loop';
 import Authorize from '@/components/Authorize';
 import Enable from '@/components/Enable';
 
 const Tree: React.FC = () => {
-  const {initialState} = useModel('@@initialState');
+  const { initialState } = useModel('@@initialState');
 
   const [editor, setEditor] = useState<APISiteModules.Data | undefined>();
   const [load, setLoad] = useState(false);
@@ -38,9 +38,9 @@ const Tree: React.FC = () => {
     doDelete(record.id)
       .then((response: APIResponse.Response<any>) => {
         if (response.code !== Constants.Success) {
-          notification.error({message: response.message});
+          notification.error({ message: response.message });
         } else {
-          notification.success({message: '栏目删除成功！'});
+          notification.success({ message: '栏目删除成功！' });
           toList();
         }
       })
@@ -60,19 +60,23 @@ const Tree: React.FC = () => {
       setData(temp);
     }
 
-    const enable: APIRequest.Enable = {id: record.id, is_enable: record.is_enable === 1 ? 2 : 1};
+    const enable: APIRequest.Enable = { id: record.id, is_enable: record.is_enable === 1 ? 2 : 1 };
 
     doEnable(enable)
       .then((response: APIResponse.Response<any>) => {
         if (response.code !== Constants.Success) {
-          notification.error({message: response.message});
+          notification.error({ message: response.message });
         } else {
           notification.success({
             message: `模块${enable.is_enable === 1 ? '启用' : '禁用'}成功！`,
           });
           if (data) {
             const temp = [...data];
-            Loop.ById(temp, record.id, (item: APISiteModules.Data) => (item.is_enable = enable.is_enable),);
+            Loop.ById(
+              temp,
+              record.id,
+              (item: APISiteModules.Data) => (item.is_enable = enable.is_enable),
+            );
             setData(temp);
           }
         }
@@ -80,7 +84,7 @@ const Tree: React.FC = () => {
       .finally(() => {
         if (data) {
           const temp = [...data];
-          Loop.ById(temp, record.id, (item: APISiteModules.Data) => (item.loading_enable = false),);
+          Loop.ById(temp, record.id, (item: APISiteModules.Data) => (item.loading_enable = false));
           setData(temp);
         }
       });
@@ -88,21 +92,21 @@ const Tree: React.FC = () => {
 
   const onCreate = () => {
     setEditor(undefined);
-    setVisible({...visible, editor: true});
+    setVisible({ ...visible, editor: true });
   };
 
   const onUpdate = (record: APISiteModules.Data) => {
     setEditor(record);
-    setVisible({...visible, editor: true});
+    setVisible({ ...visible, editor: true });
   };
 
   const onSuccess = () => {
-    setVisible({...visible, editor: false});
+    setVisible({ ...visible, editor: false });
     toList();
   };
 
   const onCancel = () => {
-    setVisible({...visible, editor: false});
+    setVisible({ ...visible, editor: false });
   };
 
   useEffect(() => {
@@ -116,18 +120,18 @@ const Tree: React.FC = () => {
         extra={
           <Space size={[10, 10]} wrap>
             <Tooltip title="刷新">
-              <Button type="primary" icon={<RedoOutlined/>} onClick={toList} loading={load}/>
+              <Button type="primary" icon={<RedoOutlined />} onClick={toList} loading={load} />
             </Tooltip>
             <Authorize permission="site.module.create">
               <Tooltip title="创建">
-                <Button type="primary" icon={<FormOutlined/>} onClick={onCreate}/>
+                <Button type="primary" icon={<FormOutlined />} onClick={onCreate} />
               </Tooltip>
             </Authorize>
           </Space>
         }
       >
-        <Table dataSource={data} rowKey="id" size="small" loading={load} pagination={false}>
-          <Table.Column title="名称" dataIndex="name"/>
+        <Table dataSource={data} rowKey="id" loading={load} pagination={false}>
+          <Table.Column title="名称" dataIndex="name" />
           <Table.Column
             title="标示"
             align="center"
@@ -148,7 +152,7 @@ const Tree: React.FC = () => {
             render={(record: APISiteModules.Data) => (
               <Authorize
                 permission="site.module.enable"
-                fallback={<Enable is_enable={record.is_enable}/>}
+                fallback={<Enable is_enable={record.is_enable} />}
               >
                 <Switch
                   size="small"
@@ -186,7 +190,7 @@ const Tree: React.FC = () => {
         </Table>
       </Card>
       {visible.editor != undefined && (
-        <Editor visible={visible.editor} params={editor} onSave={onSuccess} onCancel={onCancel}/>
+        <Editor visible={visible.editor} params={editor} onSave={onSuccess} onCancel={onCancel} />
       )}
     </>
   );

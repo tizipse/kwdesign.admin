@@ -1,8 +1,7 @@
 declare namespace APIWebSetting {
-
   type Data = {
     id?: string;
-    type?: string;
+    type: string;
     label?: string;
     key?: string;
     val?: string;
@@ -14,5 +13,5 @@ declare namespace APIWebSetting {
     visible?: boolean;
     title?: string;
     picture?: string;
-  }
+  };
 }

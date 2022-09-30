@@ -249,7 +249,7 @@ const List: React.FC = () => {
           </Space>
         }
       >
-        <Table dataSource={data} rowKey="id" size="small" loading={load} pagination={false}>
+        <Table dataSource={data} rowKey="id" loading={load} pagination={false}>
           <Table.Column title="名称" dataIndex="name" />
           <Table.Column
             title="URI"
@@ -323,7 +323,7 @@ const List: React.FC = () => {
             width={100}
             render={(record: APIWebCategories.Data) => (
               <>
-                <Authorize permission="web.category.create">
+                <Authorize permission="web.category.update">
                   <Button type="link" onClick={() => onUpdate(record)}>
                     编辑
                   </Button>
