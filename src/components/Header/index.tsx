@@ -86,6 +86,7 @@ const Header = () => {
   useEffect(() => {
     if (
       initialState?.module_key &&
+      !history.location.pathname.startsWith(`/${initialState?.module_key}`) &&
       initialState?.permissions &&
       initialState?.permissions.length > 0
     ) {
