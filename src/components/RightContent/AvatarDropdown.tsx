@@ -17,19 +17,19 @@ const AvatarDropdown = () => {
   const toLogin = async () => {
     const { query = {}, pathname } = history.location;
     const { redirect } = query;
-    if (window.location.pathname !== '/login' && !redirect) {
-      history.replace({ pathname: '/login', search: stringify({ redirect: pathname }) });
+    if (window.location.pathname !== Constants.Login && !redirect) {
+      history.push({ pathname: Constants.Login, search: stringify({ redirect: pathname }) });
     }
   };
 
   const toLogout = () => {
-    doLogout().then(async (response: APIResponse.Response<any>) => {
+    doLogout().then((response: APIResponse.Response<any>) => {
       if (response.code !== Constants.Success) {
         notification.error({ message: response.message });
       } else {
-        await setInitialState((s) => ({ settings: s?.settings, toAccount: s?.toAccount }));
-        await toLogin();
         localStorage.clear();
+        setInitialState((s) => ({ settings: s?.settings, toAccount: s?.toAccount }));
+        toLogin();
       }
     });
   };
