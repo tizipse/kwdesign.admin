@@ -1,8 +1,8 @@
 declare namespace APIWebClassifications {
-
   type Data = {
     id: string;
     name: string;
+    alias: string;
     order: number;
     is_enable?: number;
     created_at?: string;
@@ -17,6 +17,5 @@ declare namespace APIWebClassifications {
   type Enable = {
     id?: string;
     is_enable?: number;
-  }
-
+  };
 }

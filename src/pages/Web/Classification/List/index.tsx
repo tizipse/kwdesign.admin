@@ -151,6 +151,7 @@ const Tree: React.FC = () => {
       >
         <Table dataSource={data} rowKey="id" loading={load} pagination={false}>
           <Table.Column title="名称" dataIndex="name" />
+          <Table.Column title="别名" dataIndex="alias" />
           <Table.Column
             title="序号"
             align="center"

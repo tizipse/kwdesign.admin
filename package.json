@@ -51,7 +51,7 @@
     "@ant-design/pro-descriptions": "^1.6.8",
     "@ant-design/pro-layout": "^6.15.3",
     "@umijs/route-utils": "^1.0.36",
-    "antd": "~4.23",
+    "antd": "~4.24",
     "braft-editor": "^2.3.9",
     "braft-extensions": "^0.1.1",
     "classnames": "^2.2.6",

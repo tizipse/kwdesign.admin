@@ -1,5 +1,4 @@
 declare namespace APIWebProject {
-
   type Props = {
     visible?: boolean;
     params?: APIWebProjects.Data;
@@ -14,6 +13,7 @@ declare namespace APIWebProject {
     theme?: string;
     name?: string;
     address?: string;
+    height?: number;
     date?: string;
     picture?: string;
     pictures?: string[];
@@ -29,6 +29,7 @@ declare namespace APIWebProject {
     theme?: string;
     name?: string;
     address?: string;
+    height?: number;
     date?: any;
     picture?: any[];
     pictures?: any[];
@@ -45,5 +46,4 @@ declare namespace APIWebProject {
     information?: boolean;
     classification?: boolean;
   };
-
 }

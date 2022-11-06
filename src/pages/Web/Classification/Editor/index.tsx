@@ -1,8 +1,8 @@
-import {Form, Input, InputNumber, Modal, notification, Select, Spin, Tabs} from 'antd';
-import React, {useEffect, useState} from 'react';
-import {doCreate, doUpdate} from './service';
+import { Form, Input, InputNumber, Modal, notification, Select, Spin, Tabs } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { doCreate, doUpdate } from './service';
 import Constants from '@/utils/Constants';
-import {doWebClassificationByInformation} from '@/services/web';
+import { doWebClassificationByInformation } from '@/services/web';
 
 import styles from './index.less';
 
@@ -12,39 +12,40 @@ const Editor: React.FC<APIWebClassification.Props> = (props) => {
   const [type, setType] = useState('basic');
 
   const toCreate = (params: any) => {
-    setLoading({...loading, confirmed: true});
+    setLoading({ ...loading, confirmed: true });
     doCreate(params)
       .then((response: APIResponse.Response<any>) => {
         if (response.code !== Constants.Success) {
-          notification.error({message: response.message});
+          notification.error({ message: response.message });
         } else {
-          notification.success({message: '添加成功'});
+          notification.success({ message: '添加成功' });
 
           if (props.onCreate) props.onCreate();
           if (props.onSave) props.onSave();
         }
       })
-      .finally(() => setLoading({...loading, confirmed: false}));
+      .finally(() => setLoading({ ...loading, confirmed: false }));
   };
 
   const toUpdate = (params: any) => {
-    setLoading({...loading, confirmed: true});
+    setLoading({ ...loading, confirmed: true });
     doUpdate(props.params?.id, params)
       .then((response: APIResponse.Response<any>) => {
         if (response.code !== Constants.Success) {
-          notification.error({message: response.message});
+          notification.error({ message: response.message });
         } else {
-          notification.success({message: '修改成功'});
+          notification.success({ message: '修改成功' });
           if (props.onUpdate) props.onUpdate();
           if (props.onSave) props.onSave();
         }
       })
-      .finally(() => setLoading({...loading, confirmed: false}));
+      .finally(() => setLoading({ ...loading, confirmed: false }));
   };
 
   const onSubmit = (values: APIWebClassification.Former) => {
     const params: APIWebClassification.Editor = {
       name: values.name,
+      alias: values.alias,
       order: values.order,
       title: values.title,
       keyword: values.keyword,
@@ -57,7 +58,7 @@ const Editor: React.FC<APIWebClassification.Props> = (props) => {
   };
 
   const onFailed = (change: any) => {
-    const {values}: { values: APIWebClassification.Former } = change;
+    const { values }: { values: APIWebClassification.Former } = change;
 
     if (!values.name || !values.is_enable || !values.order) {
       setType('basic');
@@ -65,16 +66,17 @@ const Editor: React.FC<APIWebClassification.Props> = (props) => {
   };
 
   const toInitByUpdate = () => {
-    setLoading({...loading, information: true});
+    setLoading({ ...loading, information: true });
 
     doWebClassificationByInformation(props.params?.id)
       .then((response: APIResponse.Response<APIWeb.Classification>) => {
         if (response.code !== Constants.Success) {
-          notification.error({message: response.message});
+          notification.error({ message: response.message });
           if (props.onCancel) props.onCancel();
         } else {
           const data: APIWebClassification.Former = {
             name: response.data.name,
+            alias: response.data.alias,
             title: response.data.title,
             keyword: response.data.keyword,
             description: response.data.description,
@@ -85,7 +87,7 @@ const Editor: React.FC<APIWebClassification.Props> = (props) => {
           former.setFieldsValue(data);
         }
       })
-      .finally(() => setLoading({...loading, information: false}));
+      .finally(() => setLoading({ ...loading, information: false }));
   };
 
   const toInit = () => {
@@ -96,6 +98,7 @@ const Editor: React.FC<APIWebClassification.Props> = (props) => {
     } else {
       former.setFieldsValue({
         name: undefined,
+        alias: undefined,
         title: undefined,
         keyword: undefined,
         description: undefined,
@@ -125,13 +128,16 @@ const Editor: React.FC<APIWebClassification.Props> = (props) => {
         <Form form={former} onFinishFailed={onFailed} onFinish={onSubmit}>
           <Tabs activeKey={type} onChange={(activeKey) => setType(activeKey)}>
             <Tabs.TabPane key="basic" tab="基本" forceRender>
-              <Form.Item label="名称" name="name" rules={[{required: true}, {max: 32}]}>
-                <Input/>
+              <Form.Item label="名称" name="name" rules={[{ required: true }, { max: 32 }]}>
+                <Input />
               </Form.Item>
-              <Form.Item label="排序" name="order" rules={[{required: true}, {type: 'number'}]}>
-                <InputNumber min={1} max={99} controls={false} className={styles.order}/>
+              <Form.Item label="别名" name="alias" rules={[{ required: true }, { max: 32 }]}>
+                <Input />
               </Form.Item>
-              <Form.Item label="启用" name="is_enable" rules={[{required: true}]}>
+              <Form.Item label="排序" name="order" rules={[{ required: true }, { type: 'number' }]}>
+                <InputNumber min={1} max={99} controls={false} className={styles.order} />
+              </Form.Item>
+              <Form.Item label="启用" name="is_enable" rules={[{ required: true }]}>
                 <Select>
                   <Select.Option value={1}>是</Select.Option>
                   <Select.Option value={2}>否</Select.Option>
@@ -139,14 +145,14 @@ const Editor: React.FC<APIWebClassification.Props> = (props) => {
               </Form.Item>
             </Tabs.TabPane>
             <Tabs.TabPane key="seo" tab="SEO" forceRender>
-              <Form.Item name="title" label="标题" rules={[{max: 255}]}>
-                <Input/>
+              <Form.Item name="title" label="标题" rules={[{ max: 255 }]}>
+                <Input />
               </Form.Item>
-              <Form.Item name="keyword" label="词组" rules={[{max: 255}]}>
-                <Input.TextArea rows={1} showCount maxLength={255}/>
+              <Form.Item name="keyword" label="词组" rules={[{ max: 255 }]}>
+                <Input.TextArea rows={1} showCount maxLength={255} />
               </Form.Item>
-              <Form.Item name="description" label="描述" rules={[{max: 255}]}>
-                <Input.TextArea rows={1} showCount maxLength={255}/>
+              <Form.Item name="description" label="描述" rules={[{ max: 255 }]}>
+                <Input.TextArea rows={1} showCount maxLength={255} />
               </Form.Item>
             </Tabs.TabPane>
           </Tabs>

@@ -1,4 +1,4 @@
-import { Form, Input, Modal, notification, Select, Spin, Tabs, Upload } from 'antd';
+import { Form, Input, message, Modal, notification, Select, Spin, Tabs, Upload } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { doCreate, doUpdate } from './service';
 import { doUpload } from '@/services/helper';
@@ -251,6 +251,11 @@ const Editor: React.FC<APIWebCategory.Props> = (props) => {
                     className={styles.upload}
                     showUploadList={false}
                     maxCount={1}
+                    beforeUpload={(file) => {
+                      const size = file.size / 1024 / 1024 <= 2;
+                      if (!size) message.error('图片大小必须小于 2M');
+                      return size;
+                    }}
                     action={Constants.Upload}
                     headers={{
                       Authorization: localStorage.getItem(Constants.Authorization) as string,

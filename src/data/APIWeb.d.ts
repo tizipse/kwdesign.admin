@@ -15,6 +15,7 @@ declare namespace APIWeb {
 
   type Classification = {
     name?: string;
+    alias?: string;
     order?: number;
     is_enable?: number;
     title?: string;
@@ -33,6 +34,7 @@ declare namespace APIWeb {
     theme?: string;
     name?: string;
     address?: string;
+    height?: number;
     picture?: string;
     title?: string;
     keyword?: string;

@@ -1,5 +1,4 @@
 declare namespace APIWebClassification {
-
   type Props = {
     visible?: boolean;
     params?: APIWebClassifications.Data;
@@ -11,6 +10,7 @@ declare namespace APIWebClassification {
 
   type Editor = {
     name?: string;
+    alias?: string;
     order?: number;
     title?: string;
     keyword?: string;
@@ -20,6 +20,7 @@ declare namespace APIWebClassification {
 
   type Former = {
     name?: string;
+    alias?: string;
     order?: number;
     title?: string;
     keyword?: string;
