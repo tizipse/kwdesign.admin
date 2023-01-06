@@ -5,6 +5,7 @@ import {
   Image,
   notification,
   Popconfirm,
+  Select,
   Space,
   Switch,
   Table,
@@ -27,7 +28,7 @@ import styles from './index.less';
 const Paginate: React.FC = () => {
   const { initialState } = useModel('@@initialState');
 
-  const [search, setSearch] = useState<APIWebBanners.Search>({});
+  const [search, setSearch] = useState<APIWebBanners.Search>({ client: 'PC' });
   const [editor, setEditor] = useState<APIWebBanners.Data | undefined>();
   const [load, setLoad] = useState(false);
   const [visible, setVisible] = useState<APIWebBanners.Visible>({});
@@ -36,7 +37,7 @@ const Paginate: React.FC = () => {
 
   const toPaginate = () => {
     setLoad(true);
-    doPaginate()
+    doPaginate(search)
       .then((response: APIResponse.Paginate<APIWebBanners.Data[]>) => {
         if (response.code === Constants.Success) {
           setData(response.data.data);
@@ -141,6 +142,12 @@ const Paginate: React.FC = () => {
         title="轮播列表"
         extra={
           <Space size={[10, 10]} wrap>
+            <Tooltip title="刷新">
+              <Select value={search.client} onChange={(client) => setSearch({ ...search, client })}>
+                <Select.Option value="PC">电脑端</Select.Option>
+                <Select.Option value="MOBILE">移动端</Select.Option>
+              </Select>
+            </Tooltip>
             <Tooltip title="刷新">
               <Button type="primary" icon={<RedoOutlined />} onClick={toPaginate} loading={load} />
             </Tooltip>

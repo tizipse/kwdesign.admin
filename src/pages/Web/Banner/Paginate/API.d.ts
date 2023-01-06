@@ -1,5 +1,4 @@
 declare namespace APIWebBanners {
-
   type Data = {
     id: number;
     theme?: string;
@@ -20,6 +19,6 @@ declare namespace APIWebBanners {
 
   type Search = {
     page?: number;
-  }
-
+    client?: string;
+  };
 }

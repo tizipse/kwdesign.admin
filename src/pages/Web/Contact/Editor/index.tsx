@@ -92,15 +92,15 @@ const Editor: React.FC<APIWebContact.Props> = (props) => {
       onCancel={props.onCancel}
       confirmLoading={loading.confirmed}
     >
-      <Form form={former} onFinish={onSubmit}>
+      <Form form={former} labelCol={{ span: 3 }} onFinish={onSubmit}>
         <Form.Item label="城市" name="city" rules={[{ required: true }, { max: 32 }]}>
           <Input />
         </Form.Item>
         <Form.Item label="地址" name="address" rules={[{ required: true }, { max: 255 }]}>
           <Input />
         </Form.Item>
-        <Form.Item label="电话" name="telephone" rules={[{ required: true }, { max: 32 }]}>
-          <Input />
+        <Form.Item label="电话" name="telephone" rules={[{ max: 32 }]}>
+          <Input allowClear />
         </Form.Item>
         <Form.Item label="排序" name="order" rules={[{ required: true }, { type: 'number' }]}>
           <InputNumber min={1} max={99} controls={false} className={styles.order} />
