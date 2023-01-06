@@ -79,6 +79,7 @@ const Editor: React.FC<APIWebBanner.Props> = (props) => {
 
   const onSubmit = (values: APIWebBanner.Former) => {
     const params: APIWebBanner.Editor = {
+      client: props.client,
       theme: values.theme,
       name: values.name,
       target: values.target,

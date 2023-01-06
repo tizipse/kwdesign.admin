@@ -1,7 +1,7 @@
 declare namespace APIWebBanner {
-
   type Props = {
     visible?: boolean;
+    client?: string;
     params?: APIWebBanners.Data;
     onCreate?: () => void;
     onUpdate?: () => void;
@@ -10,6 +10,7 @@ declare namespace APIWebBanner {
   };
 
   type Editor = {
+    client?: string;
     theme?: string;
     picture?: string;
     name?: string;
@@ -33,5 +34,4 @@ declare namespace APIWebBanner {
     confirmed?: boolean;
     upload?: boolean;
   };
-
 }

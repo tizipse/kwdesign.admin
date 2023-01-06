@@ -247,9 +247,13 @@ const Paginate: React.FC = () => {
           />
         </Table>
       </Card>
-      {visible.editor != undefined && (
-        <Editor visible={visible.editor} params={editor} onSave={onSuccess} onCancel={onCancel} />
-      )}
+      <Editor
+        visible={visible.editor}
+        client={search.client}
+        params={editor}
+        onSave={onSuccess}
+        onCancel={onCancel}
+      />
     </>
   );
 };
