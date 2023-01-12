@@ -371,7 +371,7 @@ const Editor: React.FC<APIWebProject.Props> = (props) => {
                 <Upload
                   name="file"
                   listType="picture-card"
-                  maxCount={16}
+                  maxCount={30}
                   beforeUpload={(file) => {
                     const size = file.size / 1024 / 1024 <= 2;
                     if (!size) message.error('图片大小必须小于 2M');
