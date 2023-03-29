@@ -4,6 +4,8 @@ export default {
   Controls: () => {
     const controls: any[] = [
       'headings',
+      'font-size',
+      'line-height',
       'bold',
       'italic',
       'underline',

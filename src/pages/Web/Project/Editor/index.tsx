@@ -383,7 +383,7 @@ const Editor: React.FC<APIWebProject.Props> = (props) => {
                   }}
                   data={{ dir: '/project/pictures' }}
                 >
-                  {(!pictures || pictures.length < 16) && (
+                  {(!pictures || pictures.length < 30) && (
                     <div>
                       <PlusOutlined />
                       <div style={{ marginTop: 8 }}>上传</div>
